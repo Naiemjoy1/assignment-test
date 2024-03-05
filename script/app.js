@@ -11,9 +11,8 @@ const displayposts = posts =>{
 
     const postContainer = document.getElementById('post-container');
     const titleContainer = document.getElementById('title-container');
-    // show online offline 
     
-
+    postContainer.textContent =''
 
     posts.forEach(post =>{
         // console.log(post);
@@ -65,7 +64,7 @@ const displayposts = posts =>{
                             </div>
                             <div>
                                 <div class="flex gap-3 items-center">
-                                <button id="title-copy">
+                                <button id="title-copy" onclick="msg('${post.title.replace(/'/g,'@')}',${post.view_count})">
                                 <svg width="27.999817" height="28.000000" viewBox="0 0 27.9998 28" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <defs/>
                                     <path id="Vector" d="M13.9997 0C6.26794 0 0 6.26819 0 13.9999C0 21.7314 6.26794 28 13.9997 28C21.7314 28 27.9998 21.7314 27.9998 13.9999C27.9998 6.26819 21.7314 0 13.9997 0ZM13.9999 4.91736L22.2846 10.0835L5.71533 10.0835L13.9999 4.91736ZM22.3878 18.333L22.387 18.333C22.387 19.1616 21.7154 19.833 20.8869 19.833L7.11301 19.833C6.28439 19.833 5.61295 19.1615 5.61295 18.333L5.61295 10.4122C5.61295 10.3246 5.62189 10.2394 5.63644 10.1556L13.5519 15.0914C13.5616 15.0974 13.572 15.1016 13.582 15.1072C13.5925 15.1129 13.6031 15.1185 13.6137 15.1239C13.6696 15.1527 13.7272 15.176 13.7861 15.1912C13.7922 15.1929 13.7982 15.1936 13.8043 15.1949C13.8689 15.2102 13.9343 15.2197 13.9997 15.2197L14.0002 15.2197C14.0006 15.2197 14.0011 15.2197 14.0011 15.2197C14.0664 15.2197 14.1318 15.2104 14.1964 15.1949C14.2025 15.1935 14.2086 15.1929 14.2146 15.1912C14.2734 15.176 14.3308 15.1527 14.387 15.1239C14.3976 15.1185 14.4083 15.1129 14.4187 15.1072C14.4286 15.1016 14.4391 15.0974 14.4488 15.0914L22.3643 10.1556C22.3788 10.2394 22.3878 10.3243 22.3878 10.4122L22.3878 18.333Z" fill="#10B981" fill-opacity="1.000000" fill-rule="nonzero"/>
@@ -78,61 +77,48 @@ const displayposts = posts =>{
         `;
         // 4 append child
         postContainer.appendChild(postCard);
-
-
-        const titleCard = document.createElement('div')
-        titleCard.classList = `flex justify-between items-center bg-white p-4 rounded-2xl mt-5 gap-7`;
-        titleCard.innerHTML = `
-        <p id="right-title" class="font-semibold text-base">${post.title}</p>
-        <div class="flex gap-3 items-center">
-            <svg width="22.500000" height="15.500000" viewBox="0 0 22.5 15.5" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <defs/>
-                <path id="Vector" d="M9.60009 9.3999C10.0377 9.83752 10.6312 10.0834 11.25 10.0834C11.8688 10.0834 12.4623 9.83752 12.8999 9.3999C13.3375 8.96228 13.5833 8.3689 13.5833 7.75C13.5833 7.1311 13.3375 6.53772 12.8999 6.1001C12.4623 5.66248 11.8688 5.41663 11.25 5.41663C10.6312 5.41663 10.0377 5.66248 9.60009 6.1001C9.1625 6.53772 8.91667 7.1311 8.91667 7.75C8.91667 8.3689 9.1625 8.96228 9.60009 9.3999ZM11.25 14.75C7.05 14.75 3.55 12.4166 0.75 7.75C3.55 3.08337 7.05 0.75 11.25 0.75C15.45 0.75 18.95 3.08337 21.75 7.75C18.95 12.4166 15.45 14.75 11.25 14.75Z" stroke="#12132D" stroke-opacity="0.600000" stroke-width="1.500000" stroke-linejoin="round"/>
-            </svg>
-            <p id="right-count">${post.view_count}</p>
-        `;
-        // titleContainer.appendChild(titleCard);
-        
-    })
+    });
+    toggleLoadingSpinner(false);
 }
-
-const handleCopyTitle = () => {
-    const title = document.getElementById('main-title').innerText;
-    const viewCount = document.getElementById('view-count').innerText;
-
-    const count = document.getElementById('read-count');
-    count.innerText = parseInt(count.innerText) + 1;
-
-    const newDiv = document.createElement('div');
-    newDiv.classList.add('flex', 'justify-between', 'items-center', 'bg-white', 'p-4', 'rounded-2xl', 'mt-5');
-
-    newDiv.innerHTML = `
-        <p class="font-semibold text-base" id="new-title">${title}</p>
-        <div class="flex gap-3 items-center">
-            <svg width="22.500000" height="15.500000" viewBox="0 0 22.5 15.5" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <defs/>
-                <path id="Vector" d="M9.60009 9.3999C10.0377 9.83752 10.6312 10.0834 11.25 10.0834C11.8688 10.0834 12.4623 9.83752 12.8999 9.3999C13.3375 8.96228 13.5833 8.3689 13.5833 7.75C13.5833 7.1311 13.3375 6.53772 12.8999 6.1001C12.4623 5.66248 11.8688 5.41663 11.25 5.41663C10.6312 5.41663 10.0377 5.66248 9.60009 6.1001C9.1625 6.53772 8.91667 7.1311 8.91667 7.75C8.91667 8.3689 9.1625 8.96228 9.60009 9.3999ZM11.25 14.75C7.05 14.75 3.55 12.4166 0.75 7.75C3.55 3.08337 7.05 0.75 11.25 0.75C15.45 0.75 18.95 3.08337 21.75 7.75C18.95 12.4166 15.45 14.75 11.25 14.75Z" stroke="#12132D" stroke-opacity="0.600000" stroke-width="1.500000" stroke-linejoin="round"/>
-            </svg>
-            <p id="new-view">${viewCount}</p>
-        </div>
-    `;
-
-    document.getElementById('title-container').appendChild(newDiv);
-}
-
-document.getElementById('title-copy').addEventListener('click', handleCopyTitle);
-
-
 
 // handle search button
-const handleSearch = () =>{
+const handleSearch = async () =>{
+    toggleLoadingSpinner(true);
     const searchField = document.getElementById('search-field');
     const searchText = searchField.value;
     console.log(searchText);
+    const res = await fetch(
+        `https://openapi.programming-hero.com/api/retro-forum/posts?category=${searchText}`
+    );
+    const data = await res.json();
+    const searchData = data.posts;
+    console.log(searchData);
+    displayposts (searchData);
+};
+
+// Loading spinner 
+const toggleLoadingSpinner = (isLoading) => {
+    const loadingSpinner = document.getElementById('loading-spinner');
+    if (isLoading) {
+        loadingSpinner.classList.remove('hidden');
+    }
+    else{
+        loadingSpinner.classList.add('hidden');
+    }
 }
 
-loadpost();
+const showLoadingSpinnerForTwoSeconds = () => {
+    toggleLoadingSpinner(true); 
 
+    setTimeout(() => {
+        toggleLoadingSpinner(false); 
+    }, 4000);
+}
+
+showLoadingSpinnerForTwoSeconds();
+
+
+// latest post
 const latestpost = async () => {
     const res = await fetch('https://openapi.programming-hero.com/api/retro-forum/latest-posts');
     const data = await res.json();
@@ -147,7 +133,7 @@ const displayLatest = latest =>{
     const latestConatiner = document.getElementById('latestPost-container');
 
     latest.forEach(latest => {
-        console.log(latest);
+        // console.log(latest);
         // 2
         const latestCard = document.createElement('div');
         latestCard.classList = `card w-96 bg-base-100 border-2`;
@@ -163,7 +149,7 @@ const displayLatest = latest =>{
                                 </span>
                             <p class="text-[#12132D99] text-base">${latest.author?.posted_date || 'No Publish Date'}</p>                            
                         </div>
-                      <h2 class="font-extrabold text-lg text-[#12132D] mt-4">${latest.title}</h2>
+                      <h2 class="font-extrabold text-base text-[#12132D] mt-4">${latest.title}</h2>
                       <p class="text-base text-[#12132D99] font-normal">${latest.description}</p>
                       <div class="flex items-center gap-4 mt-4">
                         <div class="avatar">
@@ -185,3 +171,4 @@ const displayLatest = latest =>{
 
 
 latestpost();
+loadpost();
